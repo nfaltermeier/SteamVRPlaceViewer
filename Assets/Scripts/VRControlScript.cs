@@ -19,8 +19,8 @@ public class VRControlScript : MonoBehaviour
     public Animator LeftMovementAnimator;
     public Animator RightMovementAnimator;
 
-    public Transform MainHand;
-    public Transform OffHand;
+    public Transform LeftHand;
+    public Transform RightHand;
     public Transform Control;
     public Transform HandAverage;
     private MotionDampenerScript _dampener;
@@ -48,17 +48,16 @@ public class VRControlScript : MonoBehaviour
     void Update ()
     {
         //HandAverage is the average point between both hands that controls the board when both grip buttons are pressed
-        HandAverage.position = Vector3.Lerp(MainHand.position, OffHand.position, .5f);
-        HandAverage.rotation = Quaternion.Lerp(MainHand.rotation, OffHand.rotation, .5f);
-        HandAverage.LookAt(MainHand.position, HandAverage.up);
+        HandAverage.position = Vector3.Lerp(LeftHand.position, RightHand.position, .5f);
+        HandAverage.rotation = Quaternion.Lerp(LeftHand.rotation, RightHand.rotation, .5f);
+        HandAverage.LookAt(LeftHand.position, HandAverage.up);
 
         
         bool leftHand = SteamVR_Input.GetState("GrabGrip", SteamVR_Input_Sources.LeftHand);
         bool rightHand = SteamVR_Input.GetState("GrabGrip", SteamVR_Input_Sources.RightHand);
-        // bool leftHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch);
-        // bool rightHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch);
 
-        SetMovementIndicators(leftHand, rightHand);
+        // Not really sure what this did, but I don't think SteamVR has this built in
+        // SetMovementIndicators(leftHand, rightHand);
 
         _dampener.Target = GetDampenerTarget(leftHand, rightHand);
 
@@ -69,7 +68,6 @@ public class VRControlScript : MonoBehaviour
         UpdateScaleMode();
         UpdateTimeline();
 
-        // HighlighterScript.ShowHighlight = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
         HighlighterScript.ShowHighlight = SteamVR_Input.GetState("InteractUI", SteamVR_Input_Sources.RightHand);
 
     }
@@ -97,19 +95,17 @@ public class VRControlScript : MonoBehaviour
         }
         if(leftHand)
         {
-            return MainHand;
+            return LeftHand;
         }
         if(rightHand)
         {
-            return OffHand;
+            return RightHand;
         }
         return null;
     }
 
     private void UpdateDisplayMode()
     {
-        // bool cycleUp = OVRInput.GetDown(OVRInput.Button.One) || OVRInput.GetDown(OVRInput.Button.Three);
-        // bool cycleDown = OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Four);
         bool cycleUp = SteamVR_Input.GetState("CycleUp", SteamVR_Input_Sources.RightHand) || SteamVR_Input.GetState("CycleUp", SteamVR_Input_Sources.LeftHand);
         bool cycleDown = SteamVR_Input.GetState("CycleDown", SteamVR_Input_Sources.RightHand) || SteamVR_Input.GetState("CycleDown", SteamVR_Input_Sources.LeftHand);
         if (cycleUp && !_lastCycleUp)
@@ -134,7 +130,7 @@ public class VRControlScript : MonoBehaviour
     {
         if (ScaleMode)
         {
-            float dist = (MainHand.position - OffHand.position).magnitude;
+            float dist = (LeftHand.position - RightHand.position).magnitude;
             if (!_scaling)
             {
                 _scaling = true;
