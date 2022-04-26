@@ -118,7 +118,7 @@
                      "output" : "/actions/default/in/interactui"
                   }
                },
-               "mode" : "button",
+               "mode" : "toggle_button",
                "path" : "/user/hand/left/input/trigger"
             },
             {
@@ -154,7 +154,7 @@
                      "output" : "/actions/default/in/interactui"
                   }
                },
-               "mode" : "button",
+               "mode" : "toggle_button",
                "path" : "/user/hand/right/input/trigger"
             },
             {
@@ -237,7 +237,9 @@
                "mode" : "grab",
                "parameters" : {
                   "force_hold_threshold" : "0.02",
-                  "force_release_threshold" : "0.01"
+                  "force_release_threshold" : "0.01",
+                  "value_hold_threshold" : "1.2",
+                  "value_release_threshold" : "1.05"
                },
                "path" : "/user/hand/left/input/grip"
             },
@@ -250,7 +252,9 @@
                "mode" : "grab",
                "parameters" : {
                   "force_hold_threshold" : "0.02",
-                  "force_release_threshold" : "0.01"
+                  "force_release_threshold" : "0.01",
+                  "value_hold_threshold" : "1.2",
+                  "value_release_threshold" : "1.05"
                },
                "path" : "/user/hand/right/input/grip"
             },

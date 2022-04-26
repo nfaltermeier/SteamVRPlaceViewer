@@ -35,6 +35,9 @@ public class VRControlScript : MonoBehaviour
     private bool _lastLeftHand;
     private bool _lastRightHand;
 
+    private bool _lastCycleUp;
+    private bool _lastCycleDown;
+
     void Start ()
     {
         _dampener = Control.GetComponent<MotionDampenerScript>();
@@ -50,8 +53,8 @@ public class VRControlScript : MonoBehaviour
         HandAverage.LookAt(MainHand.position, HandAverage.up);
 
         
-        bool leftHand = SteamVR_Input.GetState("GrabPinch", SteamVR_Input_Sources.LeftHand);
-        bool rightHand = SteamVR_Input.GetState("GrabPinch", SteamVR_Input_Sources.RightHand);
+        bool leftHand = SteamVR_Input.GetState("GrabGrip", SteamVR_Input_Sources.LeftHand);
+        bool rightHand = SteamVR_Input.GetState("GrabGrip", SteamVR_Input_Sources.RightHand);
         // bool leftHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch);
         // bool rightHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch);
 
@@ -109,12 +112,12 @@ public class VRControlScript : MonoBehaviour
         // bool cycleDown = OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Four);
         bool cycleUp = SteamVR_Input.GetState("CycleUp", SteamVR_Input_Sources.RightHand) || SteamVR_Input.GetState("CycleUp", SteamVR_Input_Sources.LeftHand);
         bool cycleDown = SteamVR_Input.GetState("CycleDown", SteamVR_Input_Sources.RightHand) || SteamVR_Input.GetState("CycleDown", SteamVR_Input_Sources.LeftHand);
-        if (cycleUp)
+        if (cycleUp && !_lastCycleUp)
         {
             _modeIndex = (_modeIndex + 1) % modes.Length;
             ApplyDisplayMode();
         }
-        if (cycleDown)
+        if (cycleDown && !_lastCycleDown)
         {
             _modeIndex = _modeIndex - 1;
             if (_modeIndex == -1)
@@ -123,6 +126,8 @@ public class VRControlScript : MonoBehaviour
             }
             ApplyDisplayMode();
         }
+        _lastCycleUp = cycleUp;
+        _lastCycleDown = cycleDown;
     }
 
     private void UpdateScaleMode()
