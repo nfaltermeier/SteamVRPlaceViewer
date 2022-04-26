@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 public class VRControlScript : MonoBehaviour
 {   
@@ -48,8 +49,11 @@ public class VRControlScript : MonoBehaviour
         HandAverage.rotation = Quaternion.Lerp(MainHand.rotation, OffHand.rotation, .5f);
         HandAverage.LookAt(MainHand.position, HandAverage.up);
 
-        bool leftHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch);
-        bool rightHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch);
+        
+        bool leftHand = SteamVR_Input.GetState("GrabPinch", SteamVR_Input_Sources.LeftHand);
+        bool rightHand = SteamVR_Input.GetState("GrabPinch", SteamVR_Input_Sources.RightHand);
+        // bool leftHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch);
+        // bool rightHand = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch);
 
         SetMovementIndicators(leftHand, rightHand);
 
@@ -62,7 +66,8 @@ public class VRControlScript : MonoBehaviour
         UpdateScaleMode();
         UpdateTimeline();
 
-        HighlighterScript.ShowHighlight = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
+        // HighlighterScript.ShowHighlight = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
+        HighlighterScript.ShowHighlight = SteamVR_Input.GetState("InteractUI", SteamVR_Input_Sources.RightHand);
 
     }
 
@@ -100,8 +105,10 @@ public class VRControlScript : MonoBehaviour
 
     private void UpdateDisplayMode()
     {
-        bool cycleUp = OVRInput.GetDown(OVRInput.Button.One) || OVRInput.GetDown(OVRInput.Button.Three);
-        bool cycleDown = OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Four);
+        // bool cycleUp = OVRInput.GetDown(OVRInput.Button.One) || OVRInput.GetDown(OVRInput.Button.Three);
+        // bool cycleDown = OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Four);
+        bool cycleUp = SteamVR_Input.GetState("CycleUp", SteamVR_Input_Sources.RightHand) || SteamVR_Input.GetState("CycleUp", SteamVR_Input_Sources.LeftHand);
+        bool cycleDown = SteamVR_Input.GetState("CycleDown", SteamVR_Input_Sources.RightHand) || SteamVR_Input.GetState("CycleDown", SteamVR_Input_Sources.LeftHand);
         if (cycleUp)
         {
             _modeIndex = (_modeIndex + 1) % modes.Length;
@@ -149,11 +156,11 @@ public class VRControlScript : MonoBehaviour
 
     private void UpdateTimeline()
     {
-        bool timelineTrigger = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch);
+        bool timelineTrigger = SteamVR_Input.GetState("InteractUI", SteamVR_Input_Sources.LeftHand);
         TimelineScript.ActiveTimeline = timelineTrigger;
 
-        float leftThumbstick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).x / 1000;
-        float rightThumbstick = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick).x / 1000;
+        float leftThumbstick = SteamVR_Input.GetVector2("Timeline", SteamVR_Input_Sources.LeftHand).x / 1000;
+        float rightThumbstick = SteamVR_Input.GetVector2("Timeline", SteamVR_Input_Sources.RightHand).x / 1000;
         MainScript.Time = Mathf.Clamp01(leftThumbstick + rightThumbstick + MainScript.Time);
     }
 }
