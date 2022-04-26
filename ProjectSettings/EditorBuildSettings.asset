@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BakingScene.unity
-    guid: 00000000000000000000000000000000
+    path: Assets/Scenes/MainScene.unity
+    guid: d5fae8cebf33f26409babd5306669132
   m_configObjects:
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 6d6bb4bd9f858f843941248c8a9e8130,
       type: 2}
