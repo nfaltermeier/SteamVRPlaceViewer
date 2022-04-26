@@ -68,7 +68,7 @@ public class VRControlScript : MonoBehaviour
         UpdateScaleMode();
         UpdateTimeline();
 
-        HighlighterScript.ShowHighlight = SteamVR_Input.GetState("InteractUI", SteamVR_Input_Sources.RightHand);
+        HighlighterScript.ShowHighlight = SteamVR_Input.GetState("LaserPointer", SteamVR_Input_Sources.Any);
 
     }
 
@@ -157,11 +157,11 @@ public class VRControlScript : MonoBehaviour
 
     private void UpdateTimeline()
     {
-        bool timelineTrigger = SteamVR_Input.GetState("InteractUI", SteamVR_Input_Sources.LeftHand);
+        bool timelineTrigger = SteamVR_Input.GetState("Timeline", SteamVR_Input_Sources.Any);
         TimelineScript.ActiveTimeline = timelineTrigger;
 
-        float leftThumbstick = SteamVR_Input.GetVector2("Timeline", SteamVR_Input_Sources.LeftHand).x / 1000;
-        float rightThumbstick = SteamVR_Input.GetVector2("Timeline", SteamVR_Input_Sources.RightHand).x / 1000;
+        float leftThumbstick = SteamVR_Input.GetVector2("Scrub", SteamVR_Input_Sources.LeftHand).x / 1000;
+        float rightThumbstick = SteamVR_Input.GetVector2("Scrub", SteamVR_Input_Sources.RightHand).x / 1000;
         MainScript.Time = Mathf.Clamp01(leftThumbstick + rightThumbstick + MainScript.Time);
     }
 }
